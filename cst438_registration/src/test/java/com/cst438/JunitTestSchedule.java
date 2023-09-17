@@ -1,5 +1,6 @@
 package com.cst438;
 
+import static com.cst438.TestUtils.fromJsonString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -115,22 +116,6 @@ public class JunitTestSchedule {
 			if (dto.courseId()==30157) found=true;
 		}
 		assertFalse(found);
-	}
-		
-	private static String asJsonString(final Object obj) {
-		try {
-			return new ObjectMapper().writeValueAsString(obj);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	private static <T> T  fromJsonString(String str, Class<T> valueType ) {
-		try {
-			return new ObjectMapper().readValue(str, valueType);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 }

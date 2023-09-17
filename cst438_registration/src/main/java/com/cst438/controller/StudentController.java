@@ -40,7 +40,7 @@ public class StudentController {
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "A student with that email already exists.");
         }
-        return student;
+        return studentRepository.findByEmail(s.getEmail());
     }
 
     @PutMapping("/student/update")
@@ -65,6 +65,10 @@ public class StudentController {
         Enrollment[] studentInEnrollment = enrollmentRepository.findStudentInEnrollment(id);
         Student student =  studentRepository.findById(id).orElse(null);
 
+        /*
+        * Deletes a student unless a student has an enrollment
+        * When there is an enrollment deletion can still occur when the FORCE paramter is entered
+        * */
         if(student != null) {
             if (studentInEnrollment.length == 0) {
                 studentRepository.deleteById(id);
