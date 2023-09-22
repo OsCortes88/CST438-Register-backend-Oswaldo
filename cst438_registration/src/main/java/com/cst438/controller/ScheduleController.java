@@ -65,7 +65,7 @@ public class ScheduleController {
 		Student student = studentRepository.findByEmail(student_email);
 		Course course  = courseRepository.findById(id).orElse(null);
 		// student.status
-		// = 0  ok to register.  != 0 registration is on hold.		
+		// = 0  ok to register.  != 0 registration is onschedule hold.
 		if (student!= null && course!=null && student.getStatusCode()==0) {
 			// TODO check that today's date is not past add deadline for the course.
 			Enrollment enrollment = new Enrollment();
