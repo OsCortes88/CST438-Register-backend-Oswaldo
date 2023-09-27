@@ -1,15 +1,14 @@
 package com.cst438.controller;
 
 
-import com.cst438.domain.Enrollment;
-import com.cst438.domain.EnrollmentRepository;
-import com.cst438.domain.Student;
-import com.cst438.domain.StudentRepository;
+import com.cst438.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.websocket.server.PathParam;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,46 +20,57 @@ public class StudentController {
     @Autowired
     EnrollmentRepository enrollmentRepository;
 
-    @GetMapping("/student/list")
-    public Iterable<Student> listStudents() {
-        return studentRepository.findAll();
+    @GetMapping("/student")
+    public List<StudentDTO> listStudents() {
+        List<StudentDTO> allStudents = new ArrayList<>();
+        for(Student s : studentRepository.findAll()) {
+            StudentDTO student = new StudentDTO(s.getStudent_id(), s.getName(), s.getEmail(), s.getStatusCode(), s.getStatus());
+            allStudents.add(student);
+        }
+        return allStudents;
     }
 
-    @PostMapping("/student/add")
-    public Student addStudent(@RequestBody Student s) {
-        Student student = studentRepository.findByEmail(s.getEmail());
+    @PostMapping("/student")
+    public int addStudent(@RequestBody StudentDTO s) {
+        Student student = studentRepository.findByEmail(s.email());
         // Can successfully add a student record when the email is distinct
         if (student == null) {
             student = new Student();
-            student.setName(s.getName());
-            student.setEmail(s.getEmail());
-            student.setStatusCode(s.getStatusCode());
-            student.setStatus(s.getStatus());
-            studentRepository.save(s);
+            student.setName(s.name());
+            student.setEmail(s.email());
+            student.setStatusCode(s.statusCode());
+            student.setStatus(s.status());
+            studentRepository.save(student);
+            return student.getStudent_id();
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "A student with that email already exists.");
         }
-        return studentRepository.findByEmail(s.getEmail());
     }
 
-    @PutMapping("/student/update")
-    public Student update(@RequestBody Student us) {
-        Student student = studentRepository.findById(us.getStudent_id()).orElse(null);
+    @PutMapping("/student/{id}")
+    public Student update(@PathVariable("id") Integer id, @RequestBody StudentDTO us) {
+        Student student = studentRepository.findById(id).orElse(null);
         if(student != null) {
-            student.setStudent_id(us.getStudent_id());
-            student.setName(us.getName());
-            student.setEmail(us.getEmail());
-            student.setStatusCode(us.getStatusCode());
-            student.setStatus(us.getStatus());
-            return studentRepository.save(student);
+            Student existingEmail = studentRepository.findByEmail(us.email());
+            if(existingEmail == null) {
+                student.setName(us.name());
+                student.setEmail(us.email());
+                student.setStatusCode(us.statusCode());
+                student.setStatus(us.status());
+                return studentRepository.save(student);
+            } else {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "There is already a student with email: " + us.email());
+            }
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no student with id " + id);
         }
-        return null;
+
     }
 
 
-    @DeleteMapping("/student/delete")
+    @DeleteMapping("/student/{id}")
     public void delete(
-            @RequestParam("id") Integer id,
+            @PathVariable("id") Integer id,
             @RequestParam("FORCE")Optional<Boolean> FORCE) {
         Enrollment[] studentInEnrollment = enrollmentRepository.findStudentInEnrollment(id);
         Student student =  studentRepository.findById(id).orElse(null);
