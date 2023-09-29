@@ -64,6 +64,40 @@ public class JunitTestStudent {
 
     @Test
     @DirtiesContext
+    public void updateStudentExceptEmail() throws Exception {
+        MockHttpServletResponse response;
+
+        StudentDTO updateStudent = new StudentDTO(3,"Ryan", "trebold@csumb.edu", 0, null);
+
+        // Perform update
+        response = mvc.perform(
+                        MockMvcRequestBuilders
+                                .put("/student/3")
+                                .content(asJsonString(updateStudent))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+
+        // Verify update
+        response = mvc.perform(
+                        MockMvcRequestBuilders
+                                .get("/student")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+
+        StudentDTO[] student_list = fromJsonString(response.getContentAsString(), StudentDTO[].class);
+        boolean found = false;
+        for (StudentDTO s : student_list) {
+            if (s.name().equals(updateStudent.name()) && s.email().equals(updateStudent.email())) {
+                found = true;
+            }
+        }
+        assertTrue(found);
+    }
+
+    @Test
+    @DirtiesContext
     public void addStudent() throws Exception {
         MockHttpServletResponse response;
 
