@@ -21,6 +21,7 @@ public class StudentController {
     EnrollmentRepository enrollmentRepository;
 
     @GetMapping("/student")
+    @CrossOrigin
     public List<StudentDTO> listStudents() {
         List<StudentDTO> allStudents = new ArrayList<>();
         for(Student s : studentRepository.findAll()) {
@@ -31,6 +32,7 @@ public class StudentController {
     }
 
     @PostMapping("/student")
+    @CrossOrigin
     public int addStudent(@RequestBody StudentDTO s) {
         Student student = studentRepository.findByEmail(s.email());
         // Can successfully add a student record when the email is distinct
@@ -48,11 +50,12 @@ public class StudentController {
     }
 
     @PutMapping("/student/{id}")
+    @CrossOrigin
     public Student update(@PathVariable("id") Integer id, @RequestBody StudentDTO us) {
         Student student = studentRepository.findById(id).orElse(null);
         if(student != null) {
             Student existingEmail = studentRepository.findByEmail(us.email());
-            if(existingEmail == null) {
+            if(existingEmail == null || existingEmail.getStudent_id() == id) {
                 student.setName(us.name());
                 student.setEmail(us.email());
                 student.setStatusCode(us.statusCode());
@@ -69,6 +72,7 @@ public class StudentController {
 
 
     @DeleteMapping("/student/{id}")
+    @CrossOrigin
     public void delete(
             @PathVariable("id") Integer id,
             @RequestParam("FORCE")Optional<Boolean> FORCE) {
