@@ -1,7 +1,8 @@
 INSERT INTO student VALUES 
 (1,'test','test@csumb.edu',NULL,0),
 (2,'david','dwisneski@csumb.edu',NULL,0),
-(3,'tom', 'trebold@csumb.edu', NULL, 0);
+(3,'tom', 'trebold@csumb.edu', NULL, 0),
+(4,'test4', 'test4@csumb.edu', NULL, 0);
 
 INSERT INTO course VALUES 
 (2020,'Fall',30157,1,'BUS 203 - Financial Accounting','We 6:00PM - 7:20PM','506','112','cchou@csumb.edu','2020-08-24','2020-12-13'),
@@ -11,7 +12,8 @@ INSERT INTO course VALUES
 (2020,'Fall',31249,1,'CST 237 - Intro to Computer Architecture','TuTh 2:00PM - 3:50PM','506','104','sislam@csumb.edu','2020-08-24','2020-12-13'),
 (2020,'Fall',31253,1,'BUS 307 - Finance','We 2:00PM - 3:50PM','506','112','hwieland@csumb.edu','2020-08-24','2020-12-13'),
 (2020,'Fall',31747,1,'CST 238 - Introduction to Data Structures','Mo 2:00PM - 2:50PM','506','117','jgross@csumb.edu','2020-08-24','2020-12-13'),
-(2021,'Fall',40442,1,'CST 363 - Introduction to Database Systems','MoWe 4:00PM - 5:50PM','506','104','dwisneski@csumb.edu', '2021-08-24', '201-12-13')
+(2021,'Fall',40442,1,'CST 363 - Introduction to Database Systems','MoWe 4:00PM - 5:50PM','506','104','dwisneski@csumb.edu', '2021-08-24', '201-12-13'),
+(2021,'Fall',40443,1,'BUS 331 - Organizational Behaviour','We 2:00PM - 3:50PM','506','112','dwisneski@csumb.edu', '2021-08-24', '201-12-13')
 ;
 
 insert into enrollment values 
@@ -19,4 +21,7 @@ insert into enrollment values
 (2, 1, 2020, 'Fall', 30163, null),
 (3, 1, 2020, 'Fall', 31045, null),
 (4, 2, 2020, 'Fall', 31045, null),
-(5, 3, 2020, 'Fall', 31045, null);
+(5, 3, 2020, 'Fall', 31045, null),
+(6, 4, 2020, 'Fall', 31045, null),
+(7, 1, 2021, 'Fall', 40443, null),
+(8, 3, 2021, 'Fall', 40443, null);
