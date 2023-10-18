@@ -17,6 +17,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,13 +46,13 @@ import com.cst438.domain.EnrollmentRepository;
 @SpringBootTest
 public class EndToEndScheduleTest {
 
-	public static final String CHROME_DRIVER_FILE_LOCATION = "C:/chromedriver_win32/chromedriver.exe";
+	public static final String CHROME_DRIVER_FILE_LOCATION = "C:/chromedriver-win64/chromedriver.exe";
 
 	public static final String URL = "http://localhost:3000";
 
 	public static final String TEST_USER_EMAIL = "test@csumb.edu";
 
-	public static final int TEST_COURSE_ID = 40442; 
+	public static final int TEST_COURSE_ID = 40442;
 
 	public static final String TEST_SEMESTER = "2021 Fall";
 
@@ -75,7 +76,9 @@ public class EndToEndScheduleTest {
 		//@formatter:on
 
 		System.setProperty("webdriver.chrome.driver", CHROME_DRIVER_FILE_LOCATION);
-		WebDriver driver = new ChromeDriver();
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("--remote-allow-origins=*");
+		WebDriver driver = new ChromeDriver(options);
 		// Puts an Implicit wait for 10 seconds before throwing exception
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
@@ -114,7 +117,7 @@ public class EndToEndScheduleTest {
 			assertNotNull(we, "Test course title not found in schedule after successfully adding the course.");
 			
 			// drop the course
-			WebElement dropButton = we.findElement(By.xpath("//button"));
+			WebElement dropButton = we.findElement(By.xpath("//tr[td='"+TEST_COURSE_ID+"']//button"));
 			assertNotNull(dropButton);
 			dropButton.click();
 			
