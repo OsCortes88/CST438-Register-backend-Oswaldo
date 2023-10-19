@@ -117,7 +117,7 @@ public class JunitTestStudent {
         assertEquals(200, response.getStatus());
 
         int newStudentsID = fromJsonString(response.getContentAsString(), Integer.class);
-        assertEquals(4, newStudentsID);
+        assertEquals(5, newStudentsID);
 
         response = mvc.perform(
                         MockMvcRequestBuilders
@@ -217,11 +217,12 @@ public class JunitTestStudent {
                 .andReturn().getResponse();
 
         assertEquals(200, response.getStatus());
+        int newStudentID = Integer.parseInt(response.getContentAsString());
 
         // Test delete on student with no enrollment
         response = mvc.perform(
                         MockMvcRequestBuilders
-                                .delete("/student/4")
+                                .delete("/student/" + newStudentID)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
@@ -238,7 +239,7 @@ public class JunitTestStudent {
         StudentDTO[] students = fromJsonString(response.getContentAsString(), StudentDTO[].class);
         boolean found = false;
         for(StudentDTO s : students) {
-            if(s.studentId() == 4) {
+            if(s.studentId() == newStudentID) {
                 found = true;
             }
         }
@@ -265,7 +266,7 @@ public class JunitTestStudent {
     public void listStudents() throws Exception {
         MockHttpServletResponse response;
 
-        String[] emails = {"test@csumb.edu", "dwisneski@csumb.edu", "trebold@csumb.edu"};
+        String[] emails = {"test@csumb.edu", "dwisneski@csumb.edu", "trebold@csumb.edu", "test4@csumb.edu"};
 
         response = mvc.perform(
                         MockMvcRequestBuilders
