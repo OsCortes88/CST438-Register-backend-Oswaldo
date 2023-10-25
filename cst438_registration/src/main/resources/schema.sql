@@ -13,6 +13,14 @@ CREATE TABLE course (
   PRIMARY KEY (course_id)
 );
 
+create table user_table (
+  id identity primary key,
+  name varchar(25),
+  email varchar(25) unique,
+  password varchar(100),
+  role varchar(25)
+);
+
 CREATE TABLE student (
   student_id int  NOT NULL AUTO_INCREMENT,
   name varchar(255) NOT NULL,
