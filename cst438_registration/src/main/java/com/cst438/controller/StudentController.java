@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.websocket.server.PathParam;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +34,8 @@ public class StudentController {
 
     @PostMapping("/student")
     @CrossOrigin
-    public int addStudent(@RequestBody StudentDTO s) {
+    public int addStudent(Principal principal, @RequestBody StudentDTO s) {
+        String email = principal.getName();
         Student student = studentRepository.findByEmail(s.email());
         // Can successfully add a student record when the email is distinct
         if (student == null) {
@@ -51,7 +53,8 @@ public class StudentController {
 
     @PutMapping("/student/{id}")
     @CrossOrigin
-    public Student update(@PathVariable("id") Integer id, @RequestBody StudentDTO us) {
+    public Student update(Principal principal, @PathVariable("id") Integer id, @RequestBody StudentDTO us) {
+        String email = principal.getName();
         Student student = studentRepository.findById(id).orElse(null);
         if(student != null) {
             Student existingEmail = studentRepository.findByEmail(us.email());
@@ -74,8 +77,10 @@ public class StudentController {
     @DeleteMapping("/student/{id}")
     @CrossOrigin
     public void delete(
+            Principal principal,
             @PathVariable("id") Integer id,
             @RequestParam("FORCE")Optional<Boolean> FORCE) {
+        String email = principal.getName();
         Enrollment[] studentInEnrollment = enrollmentRepository.findStudentInEnrollment(id);
         Student student =  studentRepository.findById(id).orElse(null);
 
